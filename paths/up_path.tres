@@ -1,0 +1,7 @@
+[gd_resource type="Curve2D" format=2]
+
+[resource]
+resource_name = "uppath"
+_data = {
+"points": PoolVector2Array( -15.6045, 16.0163, 15.6045, -16.0163, -2.11824, -1.0401, 0, 0, 0, 0, 42.9955, -14.6284, -22.7427, -17.3671, 22.7427, 17.3671, 94.0304, 1.55908 )
+}
