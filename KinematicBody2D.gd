@@ -11,23 +11,22 @@ onready var dashHitbox = preload ("res://scene/dash_hitbox.tscn")
 var doublejump=2
 var velocity = Vector2.ZERO
 var grnd = true
-var sp = false
-var wallcling = false
-var wallclingp= false
-var wallclingl= false
+var isAirDashing = false
+var wallcling = 0
 var wctimer 
-var parent
+# var parent
 var wctimercooldown
-var atkhittimer
+# var atkhittimer
 var airdash = 2
 var adtimer 
-var fist
 var sprite
-var attacking
-var attack_press
+# var attacking
+# var attack_press
+var dashHitboxInstance
+
+var fist
 var fistr
-var hb
-var dashbox
+
 signal hit
 
 func _ready():
@@ -36,31 +35,30 @@ func _ready():
 	adtimer.set_wait_time(.2)
 	wctimer=get_node("wc_timer")
 	wctimer.connect("timeout",self,"on_wctimer_timeout")
-	atkhittimer=get_node("atk_hit_timeout")
-	atkhittimer.connect("timeout",self,"on_atk_hit_timeout_timeout")
 	wctimer.set_wait_time(.3)
-	atkhittimer.set_wait_time(.1)
+	# atkhittimer=get_node("atk_hit_timeout")
+	# atkhittimer.connect("timeout",self,"on_atk_hit_timeout_timeout")
+	# atkhittimer.set_wait_time(.1)
 	wctimercooldown=get_node("wc_timer2")
 	wctimercooldown.connect("timeout",self,"on_wctimercd_timeout")
 	wctimercooldown.set_wait_time(.4)
 	sprite = get_node("AnimatedSprite")
+	# parent = get_parent()
+	# fist.connect("hitt",self,"on_hit")
+	# fist.connect("end",self,"on_atk_end")
+	# fistr.connect("end2",self,"on_atk_end")
+	# fistr.connect("hitt2",self,"on_hit")
 	fist = get_node("fist_path")
 	fistr = get_node("fist_path2")
-	parent = get_parent()
-	fist.connect("hitt",self,"on_hit")
-	fist.connect("end",self,"on_atk_end")
-	fistr.connect("end2",self,"on_atk_end")
-	fistr.connect("hitt2",self,"on_hit")
 	remove_child(fist)
 	remove_child(fistr)
+
+
 func _physics_process(delta):
 	
 	#declare the input
 	var input_x = 0
 	var inputls = Vector2.ZERO
-	
-	
-	
 	
 	input_x = Input.get_action_strength("leftstick_right") - Input.get_action_strength("leftstick_left")
 	inputls.x = Input.get_action_strength("leftstick_right") - Input.get_action_strength("leftstick_left")
@@ -85,8 +83,9 @@ func _physics_process(delta):
 		doublejump = doublejump - 1
 	
 	#airdash
-	if Input.is_action_just_pressed("air_dash") && airdash >= 1 && !is_on_floor() and !wallcling and !attacking:
-		sp = true 
+	# if Input.is_action_just_pressed("air_dash") && airdash >= 1 && !is_on_floor() and !wallcling:
+	if Input.is_action_just_pressed("air_dash") && airdash >= 1 && !is_on_floor() and !wallcling:
+		isAirDashing = true 
 		sprite.play("dash")
 		velocity = Vector2.ZERO
 		velocity.x = sin(inputls.x) * 6000
@@ -94,70 +93,48 @@ func _physics_process(delta):
 		#velocity = Vector2.clamped(25000)
 		airdash = airdash - 1
 		adtimer.start()
-	if sp:
-		hb= dashHitbox.instance()
-		hb.set_position(Vector2(0,0))
-		parent.add_child(hb)
-		#hb.set_owner(parent)
-		hb.set_position(self.get_position())
+	if isAirDashing:
+		dashHitboxInstance= dashHitbox.instance()
+		dashHitboxInstance.set_position(Vector2(0,0))
+		get_parent().add_child(dashHitboxInstance)
+		dashHitboxInstance.set_position(self.get_position())
 		
 	
-	#wallhop right
-	if is_on_wall() and !is_on_floor() and wctimercooldown.is_stopped() and !wallclingl and !sp and !wallclingp:
+	#wallcling
+	if !wallcling and is_on_wall() and !is_on_floor() and wctimercooldown.is_stopped() and !isAirDashing:
 		velocity = Vector2.ZERO
 		wctimer.start()
-		wallcling = true
 		sprite.play("wallc")
 		input_x = Input.get_action_strength("leftstick_right") - Input.get_action_strength("leftstick_left")
 		if input_x > 0:
-			wallclingp = true
-			wallclingl = false
-		else:
-			wallclingl = true
-			wallclingp = false
-			
+			wallcling = -1
+		if input_x < 0:
+			wallcling = 1
 
-
-	
-	if wallclingp and !wctimer.is_stopped() and wallcling and !wallclingl:
-		if input_x == -1:
-			velocity.x = -2000
+	#wallhop
+	if wallcling and !wctimer.is_stopped():
+		if input_x == wallcling:
+			velocity.x = 2000 * wallcling
 			velocity.y = -1500
-			wallclingp = false
+			wallcling = 0
 			wctimercooldown.start()
 		
-		#wallhop left
-	#if is_on_wall() and !is_on_floor() and input_x <0 and wctimercooldown.is_stopped() and !wallclingp and !sp:
-		#wctimer.start()
-		#wallcling = true
-		#sprite.play("wallc")
-		#velocity = Vector2.ZERO
-		#wallclingl = true
-		#wallclingp = false
-		#wctimer.start()
-	if wallclingl and !wctimer.is_stopped() and wallcling and !wallclingp:
-		if input_x == 1:
-			velocity.x = 2000
-			velocity.y = -1500
-			wallcling = false
-			wallclingl = false
-			wctimercooldown.start()
-		
+
 	#gravity script
-	if sp == false and !wallcling:
+	if isAirDashing == false and !wallcling:
 		velocity.y = velocity.y + GRAV
 	if wallcling:
 		velocity.y = velocity.y +.1*GRAV
 	
 	#move left right
-	if input_x != 0 and sp != true and !wallcling:
+	if input_x != 0 and isAirDashing != true and !wallcling:
 		velocity.x += input_x * ACEL * delta
-		if !attacking:
-			sprite.play("run")
+		# if !attacking:
+		sprite.play("run")
 		#velocity = velocity.clamped(MAXSPEEDX)
-	if input_x == 0 and !sp and !wallcling:
-		if !attacking:
-			sprite.play("walk")
+	if input_x == 0 and !isAirDashing and !wallcling:
+		# if !attacking:
+		sprite.play("walk")
 		velocity.x = lerp(velocity.x,0,0.1)
 	#max speed hori
 	if velocity.x >= 600:
@@ -170,42 +147,38 @@ func _physics_process(delta):
 		doublejump = 2
 		airdash = 2
 		grnd = true
-		#sp = false
-	
+		#isAirDashing = false
 	
 	else:
 		grnd = false
-	if !is_on_floor() and !sp and !wallcling and !attacking:
+	# if !is_on_floor() and !isAirDashing and !wallcling and !attacking:
+	if !is_on_floor() and !isAirDashing and !wallcling:
 		sprite.play("jump")
 	#movement lol
 	velocity = move_and_slide(velocity,Vector2.UP)
-	attack_press = Input.is_action_just_pressed("atk1")
+	# attack_press = Input.is_action_just_pressed("atk1")
 	
-	if attack_press and !sp and !attacking:
-		if sprite.flip_h: 
-			add_child(fistr)
-		else:
-			add_child(fist)
-		
-		
-		sprite.play("attack")
-		attacking = true
+	# if attack_press and !isAirDashing and !attacking:
+	# 	if sprite.flip_h: 
+	# 		add_child(fistr)
+	# 	else:
+	# 		add_child(fist)
+		# sprite.play("attack")
+		# attacking = true
 
 	
-func on_atk_end():
-	if fist:
-		remove_child(fist)
-	if fistr:
-		remove_child(fistr)
-	attacking = false
+# func on_atk_end():
+# 	if fist:
+# 		remove_child(fist)
+# 	if fistr:
+# 		remove_child(fistr)
+# 	attacking = false
 func on_adtimer_timeout():
-	sp = false
+	isAirDashing = false
 	adtimer.stop()
 func on_wctimer_timeout():
 	wctimer.stop()
-	wallcling = false
-	wallclingl = false
-	wallclingp = false
+	wallcling = 0
 	wctimercooldown.start()
 func on_wctimercd_timeout():
 	wctimercooldown.stop()

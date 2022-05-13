@@ -30,15 +30,9 @@ position = Vector2( 1173.93, 0 )
 position = Vector2( 910.474, 435.924 )
 collision_layer = 3
 collision_mask = 3
-__meta__ = {
-"_edit_group_": true
-}
 
 [node name="Sprite" type="Sprite" parent="flor2"]
 texture = ExtResource( 6 )
-__meta__ = {
-"_edit_group_": true
-}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="flor2"]
 rotation = 1.5708
@@ -47,7 +41,7 @@ shape = SubResource( 1 )
 one_way_collision_margin = 0.0
 
 [node name="player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 345.229, 371.263 )
+position = Vector2( 344.112, 372.775 )
 
 [node name="Camera2D" type="Camera2D" parent="player"]
 position = Vector2( 0, -28.2763 )
