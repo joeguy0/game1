@@ -5,57 +5,89 @@
 [ext_resource path="res://ballgen.gd" type="Script" id=3]
 [ext_resource path="res://scene/wall.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scene/back.tscn" type="PackedScene" id=5]
-[ext_resource path="res://sprites/walls/Floo.png" type="Texture" id=6]
-
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 6.56172, 58.8864 )
+[ext_resource path="res://scene/flying_enemy.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scene/enemy.tscn" type="PackedScene" id=7]
 
 [node name="level" type="Node2D"]
-position = Vector2( 1.8877, -3.77545 )
-
-[node name="flor" parent="." instance=ExtResource( 1 )]
-
-[node name="wall" parent="." instance=ExtResource( 4 )]
-
-[node name="wall3" parent="." instance=ExtResource( 4 )]
-position = Vector2( -1.8877, -2096.54 )
-
-[node name="wall4" parent="." instance=ExtResource( 4 )]
-position = Vector2( 1173.93, -2053.72 )
-
-[node name="wall2" parent="." instance=ExtResource( 4 )]
-position = Vector2( 1173.93, 0 )
-
-[node name="flor2" type="StaticBody2D" parent="."]
-position = Vector2( 910.474, 435.924 )
-collision_layer = 3
-collision_mask = 3
-
-[node name="Sprite" type="Sprite" parent="flor2"]
-texture = ExtResource( 6 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="flor2"]
-rotation = 1.5708
-scale = Vector2( 6.4098, -6.22581 )
-shape = SubResource( 1 )
-one_way_collision_margin = 0.0
+position = Vector2( 2, -5 )
 
 [node name="player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 344.112, 372.775 )
 
 [node name="Camera2D" type="Camera2D" parent="player"]
 position = Vector2( 0, -28.2763 )
+scale = Vector2( 0.709764, 0.770398 )
 offset = Vector2( 0, -30 )
 current = true
 zoom = Vector2( 2, 2 )
-limit_left = -600
-limit_right = 1500
+limit_right = 100000000
+limit_bottom = 100000000
 smoothing_enabled = true
 offset_v = -1.0
 
 [node name="ballgen" type="Node" parent="."]
 script = ExtResource( 3 )
 
-[node name="Node2D" parent="." instance=ExtResource( 5 )]
-position = Vector2( -245.074, -246.416 )
-scale = Vector2( 1.007, 1 )
+[node name="background" parent="." instance=ExtResource( 5 )]
+position = Vector2( -1267.89, 1052.78 )
+scale = Vector2( -535.304, -25.411 )
+
+[node name="enemy" parent="." instance=ExtResource( 7 )]
+position = Vector2( 726.112, 343.775 )
+
+[node name="enemy2" parent="." instance=ExtResource( 6 )]
+position = Vector2( 963, 410 )
+
+[node name="enemy3" parent="." instance=ExtResource( 6 )]
+position = Vector2( 155, 36 )
+
+[node name="Floors" type="Node2D" parent="."]
+
+[node name="flor" parent="Floors" instance=ExtResource( 1 )]
+position = Vector2( 218.112, 689.776 )
+scale = Vector2( 1.22084, 1.30867 )
+
+[node name="flor2" parent="Floors" instance=ExtResource( 1 )]
+position = Vector2( 1438, 690 )
+scale = Vector2( 1.22084, 1.30867 )
+
+[node name="flor3" parent="Floors" instance=ExtResource( 1 )]
+position = Vector2( 2703, 691 )
+scale = Vector2( 1.22084, 1.30867 )
+
+[node name="flor4" parent="Floors" instance=ExtResource( 1 )]
+position = Vector2( 3923, 691 )
+scale = Vector2( 1.22084, 1.30867 )
+
+[node name="flor5" parent="Floors" instance=ExtResource( 1 )]
+position = Vector2( 3288.11, 354.775 )
+scale = Vector2( 1.22084, 1.30867 )
+
+[node name="flor6" parent="Floors" instance=ExtResource( 1 )]
+position = Vector2( 2023.11, 69.7754 )
+scale = Vector2( 1.22084, 1.30867 )
+
+[node name="flor7" parent="Floors" instance=ExtResource( 1 )]
+position = Vector2( 793.112, -355.225 )
+scale = Vector2( 1.22084, 1.30867 )
+
+[node name="flor8" parent="Floors" instance=ExtResource( 1 )]
+position = Vector2( 2193.11, -700.225 )
+scale = Vector2( 1.22084, 1.30867 )
+
+[node name="flor9" parent="Floors" instance=ExtResource( 1 )]
+position = Vector2( 3729, -976 )
+scale = Vector2( 1.22084, 1.30867 )
+
+[node name="Walls" type="Node2D" parent="."]
+
+[node name="wall" parent="Walls" instance=ExtResource( 4 )]
+
+[node name="wall3" parent="Walls" instance=ExtResource( 4 )]
+position = Vector2( -1.8877, -2096.54 )
+
+[node name="wall4" parent="Walls" instance=ExtResource( 4 )]
+position = Vector2( 4655.11, -2114.22 )
+
+[node name="wall2" parent="Walls" instance=ExtResource( 4 )]
+position = Vector2( 4655.11, -60.5046 )

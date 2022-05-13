@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://butterfly.png" type="Texture" id=1]
+[ext_resource path="res://scene/flying_enemy.gd" type="Script" id=2]
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 25.2413, 19.1663 )
+
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[node name="enemy" type="KinematicBody2D"]
+position = Vector2( -6, 0 )
+collision_layer = 0
+collision_mask = 0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+show_behind_parent = true
+position = Vector2( 3, -3 )
+scale = Vector2( 1.347, 2.087 )
+shape = SubResource( 3 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+position = Vector2( 0.471954, 0.471939 )
+scale = Vector2( 0.206784, 0.245939 )
+frames = SubResource( 4 )
+speed_scale = 10.0

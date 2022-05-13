@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://KinematicBody2D.gd" type="Script" id=1]
 [ext_resource path="res://sprites/player/Samee_Walk.png" type="Texture" id=2]
@@ -7,8 +7,6 @@
 [ext_resource path="res://sprites/player/Samee_Dash.png" type="Texture" id=5]
 [ext_resource path="res://sprites/player/Samee_Attacks_1.png" type="Texture" id=6]
 [ext_resource path="res://sprites/player/Samee_Wallclinge.png" type="Texture" id=7]
-[ext_resource path="res://scene/fistright_path.tscn" type="PackedScene" id=8]
-[ext_resource path="res://scene/fist_path.tscn" type="PackedScene" id=9]
 
 [sub_resource type="CapsuleShape2D" id=1]
 height = 13.9707
@@ -35,14 +33,14 @@ animations = [ {
 "name": "run",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 3 ) ],
-"loop": true,
-"name": "jump",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 7 ) ],
 "loop": true,
 "name": "wallc",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 3 ) ],
+"loop": true,
+"name": "jump",
 "speed": 5.0
 } ]
 
@@ -72,8 +70,3 @@ scale = Vector2( 0.163737, 0.194741 )
 frames = SubResource( 2 )
 animation = "run"
 speed_scale = 10.0
-
-[node name="fist_path" parent="." instance=ExtResource( 9 )]
-
-[node name="fist_path2" parent="." instance=ExtResource( 8 )]
-[connection signal="end" from="fist_path2" to="." method="on_atk_end"]

@@ -14,18 +14,11 @@ var grnd = true
 var isAirDashing = false
 var wallcling = 0
 var wctimer 
-# var parent
 var wctimercooldown
-# var atkhittimer
 var airdash = 2
 var adtimer 
 var sprite
-# var attacking
-# var attack_press
 var dashHitboxInstance
-
-var fist
-var fistr
 
 signal hit
 
@@ -36,23 +29,11 @@ func _ready():
 	wctimer=get_node("wc_timer")
 	wctimer.connect("timeout",self,"on_wctimer_timeout")
 	wctimer.set_wait_time(.3)
-	# atkhittimer=get_node("atk_hit_timeout")
-	# atkhittimer.connect("timeout",self,"on_atk_hit_timeout_timeout")
-	# atkhittimer.set_wait_time(.1)
 	wctimercooldown=get_node("wc_timer2")
 	wctimercooldown.connect("timeout",self,"on_wctimercd_timeout")
 	wctimercooldown.set_wait_time(.4)
 	sprite = get_node("AnimatedSprite")
-	# parent = get_parent()
-	# fist.connect("hitt",self,"on_hit")
-	# fist.connect("end",self,"on_atk_end")
-	# fistr.connect("end2",self,"on_atk_end")
-	# fistr.connect("hitt2",self,"on_hit")
-	fist = get_node("fist_path")
-	fistr = get_node("fist_path2")
-	remove_child(fist)
-	remove_child(fistr)
-
+	add_to_group("player")
 
 func _physics_process(delta):
 	
@@ -69,10 +50,7 @@ func _physics_process(delta):
 	if input_x < 0:
 		sprite.flip_h = false
 	
-	
-	
 	#grounded jump
-	
 	if Input.is_action_just_pressed("a") and is_on_floor() and !wallcling:
 		velocity.y = JUMPFORCE
 	
@@ -83,14 +61,12 @@ func _physics_process(delta):
 		doublejump = doublejump - 1
 	
 	#airdash
-	# if Input.is_action_just_pressed("air_dash") && airdash >= 1 && !is_on_floor() and !wallcling:
 	if Input.is_action_just_pressed("air_dash") && airdash >= 1 && !is_on_floor() and !wallcling:
 		isAirDashing = true 
 		sprite.play("dash")
 		velocity = Vector2.ZERO
 		velocity.x = sin(inputls.x) * 6000
 		velocity.y = sin(inputls.y) * 1000
-		#velocity = Vector2.clamped(25000)
 		airdash = airdash - 1
 		adtimer.start()
 	if isAirDashing:
@@ -147,32 +123,13 @@ func _physics_process(delta):
 		doublejump = 2
 		airdash = 2
 		grnd = true
-		#isAirDashing = false
-	
 	else:
 		grnd = false
-	# if !is_on_floor() and !isAirDashing and !wallcling and !attacking:
 	if !is_on_floor() and !isAirDashing and !wallcling:
 		sprite.play("jump")
 	#movement lol
 	velocity = move_and_slide(velocity,Vector2.UP)
-	# attack_press = Input.is_action_just_pressed("atk1")
-	
-	# if attack_press and !isAirDashing and !attacking:
-	# 	if sprite.flip_h: 
-	# 		add_child(fistr)
-	# 	else:
-	# 		add_child(fist)
-		# sprite.play("attack")
-		# attacking = true
 
-	
-# func on_atk_end():
-# 	if fist:
-# 		remove_child(fist)
-# 	if fistr:
-# 		remove_child(fistr)
-# 	attacking = false
 func on_adtimer_timeout():
 	isAirDashing = false
 	adtimer.stop()

@@ -19,6 +19,7 @@ hue_variation_random = 1.0
 
 [node name="Node2D" type="Node2D"]
 position = Vector2( 0, 2 )
+scale = Vector2( -5675.42, 6.39651 )
 __meta__ = {
 "_edit_group_": true
 }
@@ -26,8 +27,8 @@ __meta__ = {
 [node name="spaceBackground" type="ParallaxBackground" parent="."]
 
 [node name="spacebg" type="Sprite" parent="spaceBackground"]
-position = Vector2( 0, -576.601 )
-scale = Vector2( 1.29, 1 )
+position = Vector2( -5832, -5653 )
+scale = Vector2( 16.1553, 8.6917 )
 texture = ExtResource( 2 )
 centered = false
 offset = Vector2( 0, 0.042 )
