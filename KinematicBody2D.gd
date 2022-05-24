@@ -8,21 +8,32 @@ const DJUMPFORCE = -900
 const GRAV = 50
 
 onready var dashHitbox = preload ("res://scene/dash_hitbox.tscn")
+onready var bullet = preload ("res://scene/bullet.tscn")
+
 var doublejump=2
 var velocity = Vector2.ZERO
 var grnd = true
 var isAirDashing = false
 var wallcling = 0
+var shottimer
 var wctimer 
 var wctimercooldown
 var airdash = 2
 var adtimer 
 var sprite
 var dashHitboxInstance
+var bulletInstance
+var atkTimer
+
+var shotDLast = Vector2(800,0)
+
 
 signal hit
 
 func _ready():
+	shottimer = get_node("atk_hit_timeout")
+	shottimer.connect("timeout",self,"on_atk_hit_timeout")
+	shottimer.set_wait_time(.5)
 	adtimer=get_node("ad_timer")
 	adtimer.connect("timeout",self,"on_adtimer_timeout")
 	adtimer.set_wait_time(.2)
@@ -38,12 +49,27 @@ func _ready():
 func _physics_process(delta):
 	
 	#declare the input
+	var input_y = 0
 	var input_x = 0
 	var inputls = Vector2.ZERO
-	
+	var shotD = Vector2.ZERO
+
+	input_y = Input.get_action_strength("leftstick_up") - Input.get_action_strength("Leftstick_down")
 	input_x = Input.get_action_strength("leftstick_right") - Input.get_action_strength("leftstick_left")
 	inputls.x = Input.get_action_strength("leftstick_right") - Input.get_action_strength("leftstick_left")
 	inputls.y = Input.get_action_strength("Leftstick_down") - Input.get_action_strength("leftstick_up")
+	if input_x > 0:
+		 shotD.x = 1000
+	if input_x == 0 && input_y == 0:
+		 shotD = shotDLast
+	if input_x < 0:
+		shotD.x = -1000
+
+	if input_y > 0:
+		 shotD.y = -1000
+	if input_y < 0:
+		shotD.y = 1000
+	shotDLast = shotD
 	
 	if input_x > 0:
 		sprite.flip_h = true
@@ -75,6 +101,16 @@ func _physics_process(delta):
 		get_parent().add_child(dashHitboxInstance)
 		dashHitboxInstance.set_position(self.get_position())
 		
+	#attacking?
+	if Input.is_action_pressed("atk1") && shottimer.is_stopped():
+		bulletInstance = bullet.instance()
+		get_parent().get_parent().add_child(bulletInstance)
+		bulletInstance.set_position(self.get_position())
+		bulletInstance.set_linear_velocity(shotD)
+
+		shottimer.start()
+		
+		pass
 	
 	#wallcling
 	if !wallcling and is_on_wall() and !is_on_floor() and wctimercooldown.is_stopped() and !isAirDashing:
@@ -139,3 +175,7 @@ func on_wctimer_timeout():
 	wctimercooldown.start()
 func on_wctimercd_timeout():
 	wctimercooldown.stop()
+func on_atk_hit_timeout():
+	shottimer.stop()
+	
+
