@@ -43,4 +43,6 @@ speed_scale = 10.0
 position = Vector2( 8.0181, -0.445435 )
 shape = SubResource( 3 )
 
+[node name="atk_hit_timeout" type="Timer" parent="."]
+
 [connection signal="area_entered" from="eneHurtBox" to="." method="_on_eneHurtBox_area_entered"]
