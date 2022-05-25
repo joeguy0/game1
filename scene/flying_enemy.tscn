@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://butterfly.png" type="Texture" id=1]
 [ext_resource path="res://scene/flying_enemy.gd" type="Script" id=2]
@@ -14,7 +14,10 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[node name="enemy" type="KinematicBody2D"]
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 34.1721, 40.5 )
+
+[node name="flying_enemy" type="KinematicBody2D"]
 position = Vector2( -6, 0 )
 collision_layer = 0
 collision_mask = 0
@@ -34,3 +37,14 @@ position = Vector2( 0.471954, 0.471939 )
 scale = Vector2( 0.206784, 0.245939 )
 frames = SubResource( 4 )
 speed_scale = 10.0
+
+[node name="eneHurtBox" type="Area2D" parent="."]
+linear_damp = 2.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="eneHurtBox"]
+position = Vector2( 1.82785, -2.5 )
+shape = SubResource( 5 )
+
+[node name="atk_hit_timeout" type="Timer" parent="."]
+
+[connection signal="area_entered" from="eneHurtBox" to="." method="_on_eneHurtBox_area_entered"]

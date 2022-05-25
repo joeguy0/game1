@@ -16,29 +16,6 @@ func _ready():
 	hitTimer.set_wait_time(.05)
 	#add_collision_exception_with(player)
 
-func _physics_process(delta):
-	#var num = (rng.randi_range(0, 4) - 2) * 100
-	var enemyPos = self.get_position()
-	if (player):
-		var playerPos = player.get_position()
-		var xDiff = playerPos.x - enemyPos.x
-		var yDiff = playerPos.y - enemyPos.y
-	# fly follow
-		#velocity.x += xDiff * delta
-		#velocity.y += yDiff * delta
-	#walk follow
-		velocity.y = velocity.y + GRAV
-		velocity.x += xDiff * delta
-
-	velocity.x = clamp(velocity.x, -1000, 1000)
-	velocity = move_and_slide(velocity,Vector2.UP)
-	
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-
-
 func _on_eneHurtBox_area_entered(area):
 	if area.get_name() == "bulletHitBox":
 		hP = hP - 1 

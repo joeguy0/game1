@@ -6,7 +6,7 @@
 [ext_resource path="res://scene/wall.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scene/back.tscn" type="PackedScene" id=5]
 [ext_resource path="res://scene/flying_enemy.tscn" type="PackedScene" id=6]
-[ext_resource path="res://scene/enemy.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scene/walking_enemy.tscn" type="PackedScene" id=7]
 
 [node name="level" type="Node2D"]
 position = Vector2( 2, -5 )
@@ -24,6 +24,14 @@ limit_right = 100000000
 limit_bottom = 100000000
 smoothing_enabled = true
 offset_v = -1.0
+
+[node name="HUD" type="CanvasLayer" parent="player/Camera2D"]
+
+[node name="ProgressBar" type="ProgressBar" parent="player/Camera2D/HUD"]
+margin_left = 16.0
+margin_top = 40.0
+margin_right = 269.0
+margin_bottom = 61.0
 
 [node name="ballgen" type="Node" parent="."]
 script = ExtResource( 3 )
