@@ -33,7 +33,7 @@ signal hit
 func _ready():
 	shottimer = get_node("atk_hit_timeout")
 	shottimer.connect("timeout",self,"on_atk_hit_timeout")
-	shottimer.set_wait_time(.5)
+	shottimer.set_wait_time(.3)
 	adtimer=get_node("ad_timer")
 	adtimer.connect("timeout",self,"on_adtimer_timeout")
 	adtimer.set_wait_time(.2)

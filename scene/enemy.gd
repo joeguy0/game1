@@ -8,6 +8,7 @@ extends KinematicBody2D
 const GRAV = 50
 #var rng
 var velocity
+var hP = 10
 onready var player = get_tree().get_nodes_in_group("player")[0]
 
 func _ready():
@@ -36,3 +37,10 @@ func _physics_process(delta):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
+
+func _on_eneHurtBox_area_entered(area):
+	if area.get_name() == "bulletHitBox":
+		hP = hP - 1 
+	if hP < 1:
+		queue_free()

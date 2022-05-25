@@ -19,7 +19,6 @@ position = Vector2( 0, -28.2763 )
 scale = Vector2( 0.709764, 0.770398 )
 offset = Vector2( 0, -30 )
 current = true
-zoom = Vector2( 2, 2 )
 limit_right = 100000000
 limit_bottom = 100000000
 smoothing_enabled = true
@@ -29,7 +28,7 @@ offset_v = -1.0
 script = ExtResource( 3 )
 
 [node name="background" parent="." instance=ExtResource( 5 )]
-position = Vector2( -1267.89, 1052.78 )
+position = Vector2( -1230.13, 1055.61 )
 scale = Vector2( -535.304, -25.411 )
 
 [node name="enemy" parent="." instance=ExtResource( 7 )]
