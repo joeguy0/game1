@@ -19,6 +19,7 @@ extents = Vector2( 40.3624, 57.5623 )
 
 [node name="enemy" type="KinematicBody2D"]
 position = Vector2( -4.66367, -0.445435 )
+collision/safe_margin = 0.2
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_group_": true
@@ -41,4 +42,5 @@ speed_scale = 10.0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="eneHurtBox"]
 position = Vector2( 8.0181, -0.445435 )
 shape = SubResource( 3 )
+
 [connection signal="area_entered" from="eneHurtBox" to="." method="_on_eneHurtBox_area_entered"]

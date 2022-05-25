@@ -29,6 +29,8 @@ func _physics_process(delta):
 	#walk follow
 		#velocity.y = velocity.y + GRAV
 		#velocity.x += xDiff * delta
+	velocity.x = clamp(velocity.x, -800, 800)
+	velocity.y = clamp(velocity.y, -800, 800)
 	velocity = move_and_slide(velocity,Vector2.UP)
 
 	

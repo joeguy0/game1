@@ -51,24 +51,21 @@ func _physics_process(delta):
 	#declare the input
 	var input_y = 0
 	var input_x = 0
-	var inputls = Vector2.ZERO
 	var shotD = Vector2.ZERO
 
 	input_y = Input.get_action_strength("leftstick_up") - Input.get_action_strength("Leftstick_down")
 	input_x = Input.get_action_strength("leftstick_right") - Input.get_action_strength("leftstick_left")
-	inputls.x = Input.get_action_strength("leftstick_right") - Input.get_action_strength("leftstick_left")
-	inputls.y = Input.get_action_strength("Leftstick_down") - Input.get_action_strength("leftstick_up")
+	
 	if input_x > 0:
 		 shotD.x = 1000
-	if input_x == 0 && input_y == 0:
-		 shotD = shotDLast
 	if input_x < 0:
 		shotD.x = -1000
-
 	if input_y > 0:
 		 shotD.y = -1000
 	if input_y < 0:
 		shotD.y = 1000
+	if input_x == 0 && input_y == 0:
+		shotD = shotDLast
 	shotDLast = shotD
 	
 	if input_x > 0:
@@ -91,8 +88,8 @@ func _physics_process(delta):
 		isAirDashing = true 
 		sprite.play("dash")
 		velocity = Vector2.ZERO
-		velocity.x = sin(inputls.x) * 6000
-		velocity.y = sin(inputls.y) * 1000
+		velocity.x = sin(input_x) * 6000
+		velocity.y = sin(input_y) * 1000
 		airdash = airdash - 1
 		adtimer.start()
 	if isAirDashing:
@@ -107,10 +104,7 @@ func _physics_process(delta):
 		get_parent().get_parent().add_child(bulletInstance)
 		bulletInstance.set_position(self.get_position())
 		bulletInstance.set_linear_velocity(shotD)
-
 		shottimer.start()
-		
-		pass
 	
 	#wallcling
 	if !wallcling and is_on_wall() and !is_on_floor() and wctimercooldown.is_stopped() and !isAirDashing:
@@ -130,7 +124,6 @@ func _physics_process(delta):
 			velocity.y = -1500
 			wallcling = 0
 			wctimercooldown.start()
-		
 
 	#gravity script
 	if isAirDashing == false and !wallcling:
@@ -148,12 +141,6 @@ func _physics_process(delta):
 		# if !attacking:
 		sprite.play("walk")
 		velocity.x = lerp(velocity.x,0,0.1)
-	#max speed hori
-	if velocity.x >= 600:
-		velocity.x = 600
-	
-	if velocity.x <= -600:
-		velocity.x = -600
 	#regain jumps and land
 	if is_on_floor():
 		doublejump = 2
@@ -163,6 +150,9 @@ func _physics_process(delta):
 		grnd = false
 	if !is_on_floor() and !isAirDashing and !wallcling:
 		sprite.play("jump")
+		
+	#max speed hori
+	velocity.x = clamp(velocity.x, -600, 600)
 	#movement lol
 	velocity = move_and_slide(velocity,Vector2.UP)
 
