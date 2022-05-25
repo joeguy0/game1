@@ -10,27 +10,36 @@ const GRAV = 50
 onready var dashHitbox = preload ("res://scene/dash_hitbox.tscn")
 onready var bullet = preload ("res://scene/bullet.tscn")
 
-var doublejump=2
+var shottimer
+var wctimer 
+var wctimercooldown
+var adtimer 
+var atkTimer
+var dmgTimer
+var hitTimer
+
+var sprite
+var dashHitboxInstance
+var bulletInstance
+onready var healthBar = $Camera2D.get_node("HUD").get_node("healthBar")
+onready var deadText = $Camera2D.get_node("HUD").get_node("deadText")
+
+var doublejump = 2
 var velocity = Vector2.ZERO
 var grnd = true
 var isAirDashing = false
 var wallcling = 0
-var shottimer
-var wctimer 
-var wctimercooldown
 var airdash = 2
-var adtimer 
-var sprite
-var dashHitboxInstance
-var bulletInstance
-var atkTimer
-
 var shotDLast = Vector2(800,0)
+var nextDamageTaken = 0
 
+var health
 
-signal hit
+# signal hit
 
 func _ready():
+	deadText.visible = false
+
 	shottimer = get_node("atk_hit_timeout")
 	shottimer.connect("timeout",self,"on_atk_hit_timeout")
 	shottimer.set_wait_time(.3)
@@ -43,18 +52,26 @@ func _ready():
 	wctimercooldown=get_node("wc_timer2")
 	wctimercooldown.connect("timeout",self,"on_wctimercd_timeout")
 	wctimercooldown.set_wait_time(.4)
+	dmgTimer=get_node("dmg_timer")
+	dmgTimer.connect("timeout",self,"on_dmgtimer_timeout")
+	dmgTimer.set_wait_time(.5)
+	hitTimer = get_node("hit_timer")
+	hitTimer.connect("timeout",self,"on_hittimer_timeout")
+	hitTimer.set_wait_time(.2)
+
+	health = 100
+	
 	sprite = get_node("AnimatedSprite")
 	add_to_group("player")
 
 func _physics_process(delta):
-	
 	#declare the input
 	var input_y = 0
 	var input_x = 0
 	var shotD = Vector2.ZERO
 
-	input_y = Input.get_action_strength("leftstick_up") - Input.get_action_strength("Leftstick_down")
 	input_x = Input.get_action_strength("leftstick_right") - Input.get_action_strength("leftstick_left")
+	input_y = Input.get_action_strength("leftstick_up") - Input.get_action_strength("Leftstick_down")
 	
 	if input_x > 0:
 		 shotD.x = 1000
@@ -89,22 +106,24 @@ func _physics_process(delta):
 		sprite.play("dash")
 		velocity = Vector2.ZERO
 		velocity.x = sin(input_x) * 6000
-		velocity.y = sin(input_y) * 1000
+		velocity.y = sin(input_y) * -1000
 		airdash = airdash - 1
 		adtimer.start()
+
 	if isAirDashing:
-		dashHitboxInstance= dashHitbox.instance()
+		dashHitboxInstance = dashHitbox.instance()
 		dashHitboxInstance.set_position(Vector2(0,0))
 		get_parent().add_child(dashHitboxInstance)
 		dashHitboxInstance.set_position(self.get_position())
 		
 	#attacking?
-	if Input.is_action_pressed("atk1") && shottimer.is_stopped():
-		bulletInstance = bullet.instance()
-		get_parent().get_parent().add_child(bulletInstance)
-		bulletInstance.set_position(self.get_position())
-		bulletInstance.set_linear_velocity(shotD)
-		shottimer.start()
+	if Input.is_action_pressed("atk1") and shottimer.is_stopped():
+		if (health > 0):
+			bulletInstance = bullet.instance()
+			get_parent().add_child(bulletInstance)
+			bulletInstance.set_position(self.get_position())
+			bulletInstance.set_linear_velocity(shotD)
+			shottimer.start()
 	
 	#wallcling
 	if !wallcling and is_on_wall() and !is_on_floor() and wctimercooldown.is_stopped() and !isAirDashing:
@@ -154,7 +173,29 @@ func _physics_process(delta):
 	#max speed hori
 	velocity.x = clamp(velocity.x, -600, 600)
 	#movement lol
-	velocity = move_and_slide(velocity,Vector2.UP)
+	if (health > 0):
+		velocity = move_and_slide(velocity,Vector2.UP)
+
+	# take damage
+	if (dmgTimer.is_stopped() && nextDamageTaken > 0):
+		health -= nextDamageTaken
+		$AnimatedSprite.set_modulate(Color ("ff557d"))
+		dmgTimer.start()
+		hitTimer.start()
+
+	# update health bar
+	healthBar.set_value(health)
+	healthBar.set_modulate(Color((100 - health) / 10, health / 10, 0))
+
+	# die
+	if (health <= 0):
+		deadText.visible = true
+		self.visible = false
+		if (Input.is_action_just_pressed("ui_accept")):
+			health = 100
+			deadText.visible = false
+			self.visible = true
+			dmgTimer.start()
 
 func on_adtimer_timeout():
 	isAirDashing = false
@@ -167,5 +208,22 @@ func on_wctimercd_timeout():
 	wctimercooldown.stop()
 func on_atk_hit_timeout():
 	shottimer.stop()
-	
+func on_dmgtimer_timeout():
+	dmgTimer.stop()
+func on_hittimer_timeout():
+	$AnimatedSprite.set_modulate(Color ("ffffff"))
+	hitTimer.stop()
 
+
+func _on_playerHurtBox_area_entered(area):
+	if(area.get_name() == 'eneHurtBox'):
+		nextDamageTaken += 15
+	if(area.get_name() == 'ball_hurtbox'):
+		if(isAirDashing):
+			health += 20
+func _on_playerHurtBox_area_exited(area):
+	if(area.get_name() == 'eneHurtBox'):
+		nextDamageTaken -= 15
+	if(area.get_name() == 'ball_hurtbox'):
+		if(isAirDashing):
+			health += 20

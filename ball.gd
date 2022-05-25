@@ -15,8 +15,6 @@ var idletimer
 signal died
 signal bdied
 
-
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	rng.randomize()
@@ -27,10 +25,7 @@ func _ready():
 	idletimer.set_wait_time(.2)
 	idletimer.start()
 	sprite.set_frame(frame)
-	
-	
-	
-	pass
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	motion = get_colliding_bodies()
@@ -42,7 +37,6 @@ func _process(delta):
 
 
 func _on_ball_hurtbox_area_entered(area):
-	
 	sprite.set_self_modulate(Color(1.0,1.0,0.1*lifePoint,0.1*lifePoint))
 	rng.randomize()
 	randommov = rng.randi_range(280,400)
@@ -57,13 +51,13 @@ func _on_ball_hurtbox_area_entered(area):
 	if area.get_name() == "dash_hitbox":
 		apply_central_impulse(Vector2(0,-randommov*4))
 		lifePoint= lifePoint - 5
-		
 	if area.get_name() == "hit2":
 		apply_central_impulse(Vector2(randommovx,-randommov*3))
 		lifePoint= lifePoint -5
 	if lifePoint<=0:
 		emit_signal("died")
 		queue_free()
+
 func set_lifePoint(param1):
 	lifePoint=lifePoint
 	pass

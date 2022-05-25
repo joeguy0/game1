@@ -24,4 +24,5 @@ texture = ExtResource( 1 )
 [node name="die time" type="Timer" parent="."]
 wait_time = 0.33
 autostart = true
+
 [connection signal="timeout" from="die time" to="." method="_on_die_time_timeout"]

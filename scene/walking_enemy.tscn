@@ -38,11 +38,13 @@ frames = SubResource( 2 )
 speed_scale = 10.0
 
 [node name="eneHurtBox" type="Area2D" parent="."]
+collision_layer = 3
+collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="eneHurtBox"]
 position = Vector2( 8.0181, -0.445435 )
 shape = SubResource( 3 )
 
-[node name="atk_hit_timeout" type="Timer" parent="."]
+[node name="hit_timer" type="Timer" parent="."]
 
 [connection signal="area_entered" from="eneHurtBox" to="." method="_on_eneHurtBox_area_entered"]

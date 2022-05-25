@@ -39,12 +39,15 @@ frames = SubResource( 4 )
 speed_scale = 10.0
 
 [node name="eneHurtBox" type="Area2D" parent="."]
-linear_damp = 2.0
+collision_layer = 3
+collision_mask = 3
+linear_damp = 0.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="eneHurtBox"]
 position = Vector2( 1.82785, -2.5 )
 shape = SubResource( 5 )
 
-[node name="atk_hit_timeout" type="Timer" parent="."]
+[node name="hit_timer" type="Timer" parent="."]
 
 [connection signal="area_entered" from="eneHurtBox" to="." method="_on_eneHurtBox_area_entered"]
+[connection signal="area_exited" from="eneHurtBox" to="." method="_on_eneHurtBox_area_exited"]
