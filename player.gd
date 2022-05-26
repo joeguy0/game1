@@ -21,8 +21,8 @@ var hitTimer
 var sprite
 var dashHitboxInstance
 var bulletInstance
-onready var healthBar = $Camera2D.get_node("HUD").get_node("healthBar")
-onready var deadText = $Camera2D.get_node("HUD").get_node("deadText")
+onready var healthBar = $camera.get_node("HUD").get_node("healthBar")
+onready var deadText = $camera.get_node("HUD").get_node("deadText")
 
 var doublejump = 2
 var velocity = Vector2.ZERO
@@ -191,7 +191,7 @@ func _physics_process(delta):
 	if (health <= 0):
 		deadText.visible = true
 		self.visible = false
-		if (Input.is_action_just_pressed("ui_accept")):
+		if (Input.is_action_just_pressed("continue")):
 			health = 100
 			deadText.visible = false
 			self.visible = true

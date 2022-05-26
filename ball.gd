@@ -14,9 +14,12 @@ var motion
 var idletimer
 signal died
 signal bdied
+signal add_score
+
+onready var level = get_tree().get_nodes_in_group("level")[0]
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready():	
 	rng.randomize()
 	var frame=rng.randi_range(0,9)
 	sprite = get_node("Sprite")
@@ -25,6 +28,7 @@ func _ready():
 	idletimer.set_wait_time(.2)
 	idletimer.start()
 	sprite.set_frame(frame)
+	self.connect("add_score",level,"on_add_score")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -56,6 +60,7 @@ func _on_ball_hurtbox_area_entered(area):
 		lifePoint= lifePoint -5
 	if lifePoint<=0:
 		emit_signal("died")
+		emit_signal("add_score", 10)
 		queue_free()
 
 func set_lifePoint(param1):
@@ -65,7 +70,6 @@ func set_lifePoint(param1):
 func get_lifePoint():
 	lifePoint=lifePoint
 	pass
-
 
 func _on_sitTimer_timeout():
 	emit_signal("bdied")

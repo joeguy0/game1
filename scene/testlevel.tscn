@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://scene/floor.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scene/player.tscn" type="PackedScene" id=2]
@@ -7,14 +7,16 @@
 [ext_resource path="res://scene/back.tscn" type="PackedScene" id=5]
 [ext_resource path="res://scene/flying_enemy.tscn" type="PackedScene" id=6]
 [ext_resource path="res://scene/walking_enemy.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scene/level.gd" type="Script" id=8]
 
 [node name="level" type="Node2D"]
 position = Vector2( 2, -5 )
+script = ExtResource( 8 )
 
 [node name="player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 344.112, 372.775 )
 
-[node name="Camera2D" type="Camera2D" parent="player"]
+[node name="camera" type="Camera2D" parent="player"]
 position = Vector2( 0, -28.2763 )
 scale = Vector2( 0.709764, 0.770398 )
 offset = Vector2( 0, -100 )
@@ -25,16 +27,16 @@ limit_bottom = 100000000
 smoothing_enabled = true
 offset_v = -1.0
 
-[node name="HUD" type="CanvasLayer" parent="player/Camera2D"]
+[node name="HUD" type="CanvasLayer" parent="player/camera"]
 
-[node name="healthBar" type="ProgressBar" parent="player/Camera2D/HUD"]
+[node name="healthBar" type="ProgressBar" parent="player/camera/HUD"]
 margin_left = 16.0
 margin_top = 20.0
 margin_right = 275.0
 margin_bottom = 48.0
 value = 100.0
 
-[node name="deadText" type="Label" parent="player/Camera2D/HUD"]
+[node name="deadText" type="Label" parent="player/camera/HUD"]
 modulate = Color( 1, 0, 0, 1 )
 margin_left = 18.0
 margin_top = 52.0
@@ -44,6 +46,14 @@ rect_scale = Vector2( 3, 3 )
 size_flags_vertical = 1
 text = "DEAD"
 uppercase = true
+
+[node name="score" type="Label" parent="player/camera/HUD"]
+margin_left = 850.0
+margin_top = 21.0
+margin_right = 898.0
+margin_bottom = 35.0
+rect_scale = Vector2( 3, 3 )
+text = "000000"
 
 [node name="ballgen" type="Node" parent="."]
 script = ExtResource( 3 )

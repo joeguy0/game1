@@ -21,16 +21,12 @@ func _ready():
 	
 	# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	for i in balls:
-		pass
-		
 	if ballcount < ballcountmax:
 		gen_new_ball()
-	if ballcount == ballcountmax:
+	if ballcount >= ballcountmax:
 		rng.randomize()
 		ballcountmax=rng.randi_range(1,5)
-	if ballcount>ballcountmax:
-		pass
+
 func gen_new_ball():
 	ballcount = ballcount + 1
 	ballspotX = rng.randi_range(-100,1000)
