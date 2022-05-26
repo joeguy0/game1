@@ -21,8 +21,10 @@ var hitTimer
 var sprite
 var dashHitboxInstance
 var bulletInstance
+
 onready var healthBar = $camera.get_node("HUD").get_node("healthBar")
 onready var deadText = $camera.get_node("HUD").get_node("deadText")
+onready var level = get_parent()
 
 var doublejump = 2
 var velocity = Vector2.ZERO
@@ -36,6 +38,9 @@ var nextDamageTaken = 0
 var health
 
 # signal hit
+# signla die
+signal respawn
+
 
 func _ready():
 	deadText.visible = false
@@ -58,6 +63,8 @@ func _ready():
 	hitTimer = get_node("hit_timer")
 	hitTimer.connect("timeout",self,"on_hittimer_timeout")
 	hitTimer.set_wait_time(.2)
+	# self.connect("die",level,"on_die")
+	self.connect("respawn",level,"on_respawn")
 
 	health = 100
 	
@@ -189,9 +196,11 @@ func _physics_process(delta):
 
 	# die
 	if (health <= 0):
+		# emit_signal("die")
 		deadText.visible = true
 		self.visible = false
 		if (Input.is_action_just_pressed("continue")):
+			emit_signal("respawn")
 			health = 100
 			deadText.visible = false
 			self.visible = true

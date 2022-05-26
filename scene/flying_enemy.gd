@@ -21,8 +21,8 @@ func _physics_process(delta):
 		velocity.x += xDiff * delta
 		velocity.y += yDiff * delta
 
-	velocity.x = clamp(velocity.x, -1000, 1000)
-	velocity.y= clamp(velocity.y, -1000, 1000)
+	velocity.x = clamp(velocity.x, -500, 500)
+	velocity.y= clamp(velocity.y, -500, 500)
 	velocity = move_and_slide(velocity,Vector2.UP)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

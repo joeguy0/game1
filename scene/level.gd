@@ -12,3 +12,7 @@ func _ready():
 func on_add_score(scoreAmmount):
 	score += scoreAmmount
 	scoreLabel.text = "%06d" % score
+
+func on_respawn():
+  score = 0
+  scoreLabel.text = "%06d" % score
