@@ -112,7 +112,7 @@ func _physics_process(delta):
 		isAirDashing = true 
 		sprite.play("dash")
 		velocity = Vector2.ZERO
-		velocity.x = sin(input_x) * 6000
+		velocity.x = sin(input_x) * 10000
 		velocity.y = sin(input_y) * -1000
 		airdash = airdash - 1
 		adtimer.start()
@@ -158,7 +158,7 @@ func _physics_process(delta):
 		velocity.y = velocity.y +.1*GRAV
 	
 	#move left right
-	if input_x != 0 and isAirDashing != true and !wallcling:
+	if input_x != 0 and !isAirDashing and !wallcling:
 		velocity.x += input_x * ACEL * delta
 		# if !attacking:
 		sprite.play("run")
