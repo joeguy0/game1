@@ -8,8 +8,8 @@
 [ext_resource path="res://sprites/player/Samee_Attacks_1.png" type="Texture" id=6]
 [ext_resource path="res://sprites/player/Samee_Wallclinge.png" type="Texture" id=7]
 
-[sub_resource type="CapsuleShape2D" id=1]
-height = 13.9707
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 10, 18.6871 )
 
 [sub_resource type="SpriteFrames" id=2]
 animations = [ {
@@ -18,19 +18,19 @@ animations = [ {
 "name": "jump",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 2 ) ],
-"loop": true,
-"name": "walk",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 7 ) ],
 "loop": true,
 "name": "wallc",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 5 ) ],
+"frames": [ ExtResource( 2 ) ],
 "loop": true,
-"name": "dash",
+"name": "walk",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 6 ) ],
+"loop": true,
+"name": "attack",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 4 ) ],
@@ -38,9 +38,9 @@ animations = [ {
 "name": "run",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 6 ) ],
+"frames": [ ExtResource( 5 ) ],
 "loop": true,
-"name": "attack",
+"name": "dash",
 "speed": 5.0
 } ]
 
@@ -56,9 +56,9 @@ __meta__ = {
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 show_behind_parent = true
-position = Vector2( 0, 13.454 )
+position = Vector2( 0, 6 )
 scale = Vector2( 1.347, 2.087 )
-shape = SubResource( 1 )
+shape = SubResource( 4 )
 
 [node name="ad_timer" type="Timer" parent="."]
 

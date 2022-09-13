@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://square.png" type="Texture" id=1]
+
+[node name="flor" type="StaticBody2D"]
+collision_layer = 3
+collision_mask = 3
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( -4.23193e-06, -4.11272e-06 )
+scale = Vector2( 0.22831, 0.22779 )
+texture = ExtResource( 1 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( -50, 50, 50, 50, 50, -50, -50, -50 )
